@@ -1,0 +1,49 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 准备站点文件
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          BASE="https://xxxbean.github.io/dance-teacher"
+          if curl -fsSL --retry 3 -o site.zip "https://litter.catbox.moe/ba21lj.zip"; then
+            unzip -q -o site.zip -d dist
+          else
+            echo "临时包失效，改从已发布站点抓取"
+            for f in index.html styles.css data.js app.js manifest.webmanifest sw.js favicon.ico assets/study.webp assets/effort.webp assets/sprint.webp assets/lazy.webp assets/slack.webp assets/phone.webp icons/icon-192.png icons/icon-512.png icons/apple-touch-icon.png; do
+              mkdir -p "dist/$(dirname $f)"
+              curl -fsSL --retry 3 -o "dist/$f" "$BASE/$f"
+            done
+          fi
+          test -f dist/index.html
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
