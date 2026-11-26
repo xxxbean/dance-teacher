@@ -1,15 +1,17 @@
 # 中职舞蹈教资 · 学习工作台（网页版）
 
-纯静态站点，发布在 GitHub Pages：
+纯静态站点，网页版地址：
 
-https://xxxbean.github.io/dance-teacher/
+- GitHub Pages（开启后）：https://xxxbean.github.io/dance-teacher/
+- CDN：https://cdn.jsdelivr.net/gh/xxxbean/dance-teacher@site/index.html
 
-- 离线可用（Service Worker 预缓存全部资源）
-- 手机可「添加到主屏幕」当 App 用（PWA，独立窗口、自带图标）
-- 数据存在浏览器本地 localStorage，换设备不同步
+手机浏览器打开后 →“添加到主屏幕”即可当 App 用（离线可用，Service Worker 已预缓存全部资源）。学习数据存在浏览器本地 localStorage，换设备不同步。
 
-## 为什么仓库里没有源码
+## 结构
 
-站点资源（含 6 张手绘贴纸）由 `.github/workflows/pages.yml` 在工作流运行时取回并直接发布为 Pages 产物，仓库只保留部署脚本。原始文件保存在本地工作目录 `中职舞蹈教资学习工作台`。
+- `main` 分支：只放部署脚本，不含站点源码
+- `site` 分支：由工作流自动生成，就是实际发布的整站（含 6 张手绘贴纸）
 
-更新内容：本地改好 → 重新打包站点 zip → 替换工作流里的下载地址 → 提交触发部署；或直接改工作流里的抓取列表从线上旧版本复制后再覆盖。
+## 更新内容
+
+本地改好 `中职舞蹈教资学习工作台` 里的文件 → 重新打包 zip → 把 `.github/workflows/pages.yml` 里的下载地址换成新链接 → 提交 main 分支即可。临时包失效时，工作流会自动从线上旧版抓取文件。

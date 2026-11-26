@@ -1,4 +1,4 @@
-name: Deploy site
+name: Sync site
 
 on:
   push:
@@ -6,44 +6,41 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: sync
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - name: 准备站点文件
+      - name: 取回站点文件
         run: |
           set -euo pipefail
-          mkdir -p dist
-          BASE="https://xxxbean.github.io/dance-teacher"
+          mkdir -p site
+          BASE="https://cdn.jsdelivr.net/gh/${{ github.repository }}@site"
           if curl -fsSL --retry 3 -o site.zip "https://litter.catbox.moe/ba21lj.zip"; then
-            unzip -q -o site.zip -d dist
+            echo "从临时包解包"
+            unzip -q -o site.zip -d site
           else
-            echo "临时包失效，改从已发布站点抓取"
+            echo "临时包失效，从线上旧版抓取"
             for f in index.html styles.css data.js app.js manifest.webmanifest sw.js favicon.ico assets/study.webp assets/effort.webp assets/sprint.webp assets/lazy.webp assets/slack.webp assets/phone.webp icons/icon-192.png icons/icon-512.png icons/apple-touch-icon.png; do
-              mkdir -p "dist/$(dirname $f)"
-              curl -fsSL --retry 3 -o "dist/$f" "$BASE/$f"
+              mkdir -p "site/$(dirname $f)"
+              curl -fsSL --retry 3 -o "site/$f" "$BASE/$f"
             done
           fi
-          test -f dist/index.html
+          touch site/.nojekyll
+          test -f site/index.html
 
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-      - id: deploy
-        uses: actions/deploy-pages@v4
+      - name: 推送到 site 分支
+        run: |
+          cd site
+          git init -q
+          git config user.name "site-bot"
+          git config user.email "site-bot@users.noreply.github.com"
+          git checkout -q -b site
+          git add -A
+          git commit -q -m "deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push -q --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site
