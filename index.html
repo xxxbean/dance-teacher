@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FBF5EA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="舞蹈教资">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>中职舞蹈教资 · 学习工作台</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="k">STUDY DESK · 2026</div>
+      <h1>中职舞蹈教资<br><em>学习工作台</em></h1>
+      <p>贵州 · 中职专业课（舞蹈表演 D750202）<br>笔试两科 + 20 分钟面试</p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-mo" id="dock"><div class="mo-slot slot-dock" data-mo="dock"></div></div>
+    <div class="side-foot">
+      <div>进度自动保存在本机浏览器</div>
+      <div style="margin-top:6px">换电脑：笔记与设置 → 导出备份</div>
+    </div>
+  </aside>
+  <main class="main" id="appMain"></main>
+</div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+</script>
+</body>
+</html>

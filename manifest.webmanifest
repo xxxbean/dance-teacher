@@ -1,0 +1,32 @@
+{
+  "name": "中职舞蹈教资 · 学习工作台",
+  "short_name": "舞蹈教资",
+  "description": "贵州中职专业课（舞蹈表演 D750202）教资备考工作台：考情、知识卡、题库、试讲计时器与学习记录，离线可用。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF5EA",
+  "theme_color": "#FBF5EA",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
